@@ -39,6 +39,9 @@ download the tarball and run ``python setup.py install``
  Usage 
 =========
 
+::
+
+    ./manage.py autotest
 
 
 

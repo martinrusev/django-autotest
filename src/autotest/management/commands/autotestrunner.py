@@ -3,7 +3,8 @@ from django.conf import settings
 
 
 def get_runner(settings):
-	test_path = settings.AUTOTEST_RUNNER.split('.')
+	runner = 'autotest.testrunner.AutotestSuiteRunner'
+	test_path = runner.split('.')
 	# Allow for Python 2.5 relative paths
 	if len(test_path) > 1:
 		test_module_name = '.'.join(test_path[:-1])

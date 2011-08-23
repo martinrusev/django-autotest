@@ -1,6 +1,9 @@
 from setuptools import setup, find_packages
 import os
 
+SRC_DIR = 'src'
+
+
 def read(filename):
     return open(os.path.join(os.path.dirname(__file__), filename)).read()
  
@@ -22,8 +25,8 @@ setup(
     author_email='martinrusev@live.com',
     url='https://github.com/martinrusev/django-autotest',
     license='BSD',
-    packages=find_packages(),
+	package_dir={'': SRC_DIR},
+	packages=find_packages(SRC_DIR),
     zip_safe=False,
     install_requires=['setuptools','watchdog',],
-    include_package_data=True,
 ) 
