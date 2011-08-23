@@ -27,6 +27,8 @@ setup(
     license='BSD',
 	package_dir={'': SRC_DIR},
 	packages=find_packages(SRC_DIR),
+	package_data = {'': ['*.sh']},
+	include_package_data=True,
     zip_safe=False,
     install_requires=['setuptools','watchdog',],
 ) 
