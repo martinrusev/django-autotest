@@ -8,6 +8,7 @@ from subprocess import Popen, PIPE
 from os.path import split, dirname, join, abspath 
 import os.path
 import re
+from optparse import make_option
 
 
 CURRENT_PATH =  abspath(dirname(__file__))
@@ -21,10 +22,18 @@ def absolute_path(path):
 class LoggingEventHandler(FileSystemEventHandler):
 
 
+	def __init__(self, *args, **options):
+		self.quick = options.get('quick', False)
+		self.current_app = ''
+		self.project_path = settings.PROJECT_ROOT.split(os.sep)
+
 	def run_test_suite(self):
 
 		chdir(settings.PROJECT_ROOT)
-		result = Popen(['./manage.py', 'autotestrunner'], stdout=PIPE, stderr=PIPE, close_fds=True).communicate() 
+		test_command = ['python','manage.py', 'autotestrunner']
+		if self.quick is True:
+			test_command.append(self.current_app)
+		result = Popen(test_command, stdout=PIPE, stderr=PIPE, close_fds=True).communicate() 
 
 		title = ''
 		content = ''
@@ -36,6 +45,7 @@ class LoggingEventHandler(FileSystemEventHandler):
 				if l.startswith('OK') or l.startswith('FAIL'):
 					content = l
 
+		print line # Display the test suite results in the terminal
 		chdir(AUTOTEST_PATH)
 		os.system('chmod u+rwx notify.sh')
 		os.system('./notify.sh "{0}" "{1}" '.format(title, content))
@@ -46,20 +56,28 @@ class LoggingEventHandler(FileSystemEventHandler):
 		path_to_file, filename = split(event.src_path)
 		valid_test = re.compile('(?:^|[\\b_\\.-])[Tt]ests?.py$') # extended from nose
 
+
 		if valid_test.search(filename):
+			
+			path_to_file_list = path_to_file.split(os.sep)
+			current_app_path = list(set(path_to_file_list) - set(self.project_path))
+			self.current_app = ".".join(current_app_path)
+			
 			self.run_test_suite()
 	
 
 class Command(BaseCommand):
-	option_list = BaseCommand.option_list + ()
+	option_list = BaseCommand.option_list + (
+		make_option('--quick', default=False ,dest="quick", action="store_true",
+					help='Runs the tests only for the application you are currently working on'),
+		)	
 	help = 'Runs the test suite when a tests file is saved'
-	args = '[appname ...]'
 
 	requires_model_validation = False
 
 	def handle(self, *args, **options):
-		#handler = AutotestEventHandler()
-		handler = LoggingEventHandler()
+		quick = options.get('quick', False)
+		handler = LoggingEventHandler(quick=quick)
 
 		app_path = absolute_path(settings.PROJECT_ROOT)
 
