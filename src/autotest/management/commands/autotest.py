@@ -7,6 +7,7 @@ from django.conf import settings
 from subprocess import Popen, PIPE 
 from os.path import split, dirname, join, abspath 
 import os.path
+import re
 
 
 CURRENT_PATH =  abspath(dirname(__file__))
@@ -43,8 +44,10 @@ class LoggingEventHandler(FileSystemEventHandler):
 	def on_modified(self, event):
 		super(LoggingEventHandler, self).on_modified(event)
 		path_to_file, filename = split(event.src_path)
+		valid_test = re.compile('(?:^|[\\b_\\.-])[Tt]ests?.py$') # extended from nose
 
-		self.run_test_suite()
+		if valid_test.search(filename):
+			self.run_test_suite()
 	
 
 class Command(BaseCommand):
