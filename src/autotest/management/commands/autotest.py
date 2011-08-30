@@ -77,11 +77,9 @@ class Command(BaseCommand):
 
 	def handle(self, *args, **options):
 		quick = options.get('quick', False)
-		app_path = absolute_path(os.getcwd())
+		app_path = absolute_path(getcwd())
 		
 		handler = LoggingEventHandler(quick=quick, app_path=app_path)
-
-		app_path = absolute_path(getcwd())
 
 		observer = Observer()
 		observer.schedule(handler, path=app_path, recursive=True)
