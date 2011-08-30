@@ -7,5 +7,3 @@ class SimpleTest(TestCase):
 
 	def test_something_else(self):
 		self.assertEqual(1,2) 
-	
-	

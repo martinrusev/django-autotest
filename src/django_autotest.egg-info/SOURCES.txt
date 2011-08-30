@@ -1,0 +1,16 @@
+LICENSE.txt
+MANIFEST.in
+README.rst
+setup.py
+src/autotest/__init__.py
+src/autotest/testrunner.py
+src/autotest/management/__init__.py
+src/autotest/management/commands/__init__.py
+src/autotest/management/commands/autotest.py
+src/autotest/management/commands/autotestrunner.py
+src/django_autotest.egg-info/PKG-INFO
+src/django_autotest.egg-info/SOURCES.txt
+src/django_autotest.egg-info/dependency_links.txt
+src/django_autotest.egg-info/not-zip-safe
+src/django_autotest.egg-info/requires.txt
+src/django_autotest.egg-info/top_level.txt

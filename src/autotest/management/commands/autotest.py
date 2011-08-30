@@ -2,8 +2,7 @@ import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler 
 from django.core.management.base import BaseCommand
-from os import chdir
-from django.conf import settings
+from os import chdir, getcwd
 from subprocess import Popen, PIPE 
 from os.path import split, dirname, join, abspath 
 import os.path
@@ -24,12 +23,13 @@ class LoggingEventHandler(FileSystemEventHandler):
 
 	def __init__(self, *args, **options):
 		self.quick = options.get('quick', False)
+		self.app_path = options.get('app_path', False)
 		self.current_app = ''
-		self.project_path = settings.PROJECT_ROOT.split(os.sep)
+		self.project_path = self.app_path.split(os.sep)
 
 	def run_test_suite(self):
 
-		chdir(settings.PROJECT_ROOT)
+		chdir(self.app_path)
 		test_command = ['python','manage.py', 'autotestrunner']
 		if self.quick is True:
 			test_command.append(self.current_app)
@@ -77,9 +77,11 @@ class Command(BaseCommand):
 
 	def handle(self, *args, **options):
 		quick = options.get('quick', False)
-		handler = LoggingEventHandler(quick=quick)
+		app_path = absolute_path(os.getcwd())
+		
+		handler = LoggingEventHandler(quick=quick, app_path=app_path)
 
-		app_path = absolute_path(settings.PROJECT_ROOT)
+		app_path = absolute_path(getcwd())
 
 		observer = Observer()
 		observer.schedule(handler, path=app_path, recursive=True)

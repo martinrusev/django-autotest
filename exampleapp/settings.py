@@ -30,10 +30,10 @@ ROOT_URLCONF = 'exampleapp.urls'
 
 INSTALLED_APPS = (
     'django.contrib.staticfiles',
+	'myapp',
 	'autotest'
   )
 
 
-PROJECT_ROOT = abspath(dirname(__file__))
 
 

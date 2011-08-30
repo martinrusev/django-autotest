@@ -22,20 +22,7 @@ download the tarball and run ``python setup.py install``
 	INSTALLED_APPS = ('autotest')
 
 
-
-3. Add a PROJECT_ROOT variable to ``settings.py`` with the absolute path to your Django application. 
-
-::
-
-	from os.path import abspath, dirname 
-
-	PROJECT_ROOT = abspath(dirname(__file__))
-	
-	# or if you have already defined that for another purposes ( templates for example )
-	PROJECT_ROOT = MY_PROJECT_ROOT_DIRECTORY
-
-        
-4. Install the desktop notification library according to your operating system:
+3. Install the desktop notification library according to your operating system:
 
     On Linux install **libnotify-bin**
 

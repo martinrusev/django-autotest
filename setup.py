@@ -7,7 +7,7 @@ SRC_DIR = 'src'
 def read(filename):
     return open(os.path.join(os.path.dirname(__file__), filename)).read()
  
-version = '0.1.0'
+version = '0.2.0'
  
 setup(
     name='django_autotest',
